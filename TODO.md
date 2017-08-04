@@ -1,21 +1,12 @@
-Features:
-#############################
 -lotw import
 -spot cooldown station / band
 -band filter
 -dxcc filter
-.
-.
-.
+
 -rewite cluster module in RUST
  -faster search algo. 
     read only part of memory??
 
-
-*****************************
-
-Fixes:
-#############################
 -deploy on raspberry pi
 -check/fix internet shutdown
 -refactor code
