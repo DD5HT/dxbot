@@ -4,6 +4,7 @@ Features
 - spot cooldown station / band
 - band filter
 - dxcc filter
+- watch command
 
 Stuff for later
 ---------------

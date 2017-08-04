@@ -62,7 +62,7 @@ def user_cluster(user_id):
         print("IT WORKS NOW" + answer)
     return answer
 
-def dxcluster():
+def dxcluster():#TODO retry if internet drops
     """Starts the DX-Cluster"""
     CALLSIGN = b"DD5HT"
     AMOUNT = 10000
@@ -96,4 +96,4 @@ def matchedcall(clusteroutput):
 
 def reset_callsignlist():
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    r.set("CALLSIGNS", "") #IF 0 (end of for loop) kill old callsign list
+    r.set("CALLSIGNS", "") 
