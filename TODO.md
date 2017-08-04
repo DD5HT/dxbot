@@ -1,12 +1,18 @@
--lotw import
--spot cooldown station / band
--band filter
--dxcc filter
+Features
+=================
+# lotw import
+# spot cooldown station / band
+# band filter
+ #dxcc filter
 
--rewite cluster module in RUST
- -faster search algo. 
-    read only part of memory??
+Stuff for later
+-----------------
+# rewite cluster module in RUST
+## faster search algo. 
+### read only part of memory??
 
--deploy on raspberry pi
--check/fix internet shutdown
--refactor code
+Deployment
+==========
+# deploy on raspberry pi
+# check/fix internet shutdown
+# refactor code
