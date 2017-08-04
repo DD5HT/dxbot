@@ -19,7 +19,7 @@ def generate_master_list():
         data = r.get(name).decode('utf-8')
         for item in data.split():
             s.add(item)
-        #print(s)
+    #print(s)
     return list(s)
 
 def get_matches():
@@ -49,11 +49,10 @@ def user_cluster(user_id):
 
     bucket = []
     for entries in masteroutput:
-        print("MASTER: " + entries)
         for call in user: #ALL Calls
-            print("CALL IST HIER:" + call)
             if call in entries: #Check if Call Matches !!!PROBLEM MASTER LISTE WIRD NACH JEDEM AUFRUF GELÖSCHT !!!!!
-                print("HEP ITS HERE")
+                print("We got a Match")
+                print(entries)
                 bucket.append(entries)
                 print(bucket)
     
@@ -86,7 +85,7 @@ def dxcluster():
                     print(str(i) + " FOUND")
                     #print(output)
                     matchedcall(output)
-            print(output)
+            #print(output)
     
 
 def matchedcall(clusteroutput):

@@ -5,7 +5,9 @@ def create_user(user_id):
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
     user_id_calls = "CALLS:" + str(user_id)
+    user_id_dxcc = "DXCC:" + str(user_id)
     r.set(user_id_calls, "")
+    r.set(user_id_dxcc, "")
 
     success = "Your account was created successfully, good DX!"
     return success
@@ -42,6 +44,25 @@ def get_calls(user_id):
         return data
     else:
         return failstring
+
+def add_dxcc(user_id, dxcc):
+    """Adds new dxcc to the database"""
+    user_id = "DXCC:" + str(user_id)
+    dxcc = dxcc.upper() + " "
+    #TODO Check if DXCC is in list:
+    #TODO Generate DXCC name
+    
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    r.append(user_id, dxcc)
+
+    new_dxcc = "Added: " + dxcc +"to callsign list"
+    return new_dxcc
+
+def delete_dxcc(user_id):
+    pass
+def get_dxcc(user_id):
+    pass
+
 
 def get_all_chats_ids():
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
