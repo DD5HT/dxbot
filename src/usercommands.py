@@ -55,13 +55,21 @@ def add_dxcc(user_id, dxcc):
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
     r.append(user_id, dxcc)
 
-    new_dxcc = "Added: " + dxcc +"to callsign list"
+    new_dxcc = "Added: " + dxcc +"to dxcc list"
     return new_dxcc
 
 def delete_dxcc(user_id):
     pass
 def get_dxcc(user_id):
-    pass
+    user_id = "DXCC:" + str(user_id) 
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    data = r.get(user_id).decode('utf-8')
+    failstring = "You have entered no dxcc so far!"
+    if data:
+        return data
+    else:
+        return failstring
+
 
 
 def get_all_chats_ids():
