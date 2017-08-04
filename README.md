@@ -57,9 +57,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Authors
 
-* **Hendrik Teuber, DD5HT** - *Initial work* - [PurpleBooth](https://github.com/DD5HT)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Hendrik Teuber, DD5HT** - *Initial work* - [DD5HT](https://github.com/DD5HT)
 
 ## License
 
