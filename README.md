@@ -12,7 +12,9 @@ These instructions will get you a copy of the project up and running on your loc
 - python-telegram-bot
 
 ```
-$ sudo apt-get install python3 python-pip 
+$ sudo apt-get install python3 python3-pip
+$ pip install python-telegram-bot --upgrade
+$ pip install redis
 ```
 
 Setting up redis:

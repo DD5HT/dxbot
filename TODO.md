@@ -6,6 +6,11 @@ Features
 - dxcc filter
 - watch command
 
+Stuff to fix
+============
+- handle internet connection drop
+- handle stopped dx cluster
+
 Stuff for later
 ---------------
 - rewite cluster.py in RUST
@@ -16,5 +21,4 @@ Stuff for later
 Deployment
 ==========
 - deploy on raspberry pi
-- check/fix internet shutdown
 - refactor code

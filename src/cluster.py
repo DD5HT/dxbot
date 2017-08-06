@@ -37,7 +37,7 @@ def get_matches():
         return data # pylint: disable=W0150
 
 
-def user_cluster(user_id):
+def user_cluster(user_id): 
     """Checks if callsigns in user list match callsigns in master list"""
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
  
@@ -65,7 +65,7 @@ def user_cluster(user_id):
 def dxcluster():#TODO retry if internet drops
     """Starts the DX-Cluster"""
     CALLSIGN = b"DD5HT"
-    AMOUNT = 10000
+    AMOUNT = 100000
     
     print("DX-Cluster started!")
     with Telnet('cluster.dl9gtb.de', 8000) as tn:
