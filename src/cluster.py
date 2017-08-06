@@ -50,7 +50,7 @@ def user_cluster(user_id):
     bucket = []
     for entries in masteroutput:
         for call in user: #ALL Calls
-            if call in entries: #Check if Call Matches !!!PROBLEM MASTER LISTE WIRD NACH JEDEM AUFRUF GELÖSCHT !!!!!
+            if call in entries: 
                 print("We got a Match")
                 print(entries)
                 bucket.append(entries)
