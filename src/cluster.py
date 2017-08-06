@@ -19,7 +19,7 @@ def generate_master_list():
         data = r.get(name).decode('utf-8')
         for item in data.split():
             s.add(item)
-    #print(s)
+    print(s)
     return list(s)
 
 def get_matches():

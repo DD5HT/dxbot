@@ -12,13 +12,28 @@ These instructions will get you a copy of the project up and running on your loc
 - python-telegram-bot
 
 ```
-$ pip install python-telegram-bot --upgrade
+$ sudo apt-get install python3 python-pip 
+```
+
+Setting up redis:
+```
+$ wget http://download.redis.io/redis-stable.tar.gz
+$ tar xvzf redis-stable.tar.gz
+$ cd redis-stable
+$ make
+$ cd src
+$ sudo cp redis-server /usr/local/bin
+$ sudo cp redis-cli /usr/local/bin
+$ cd ..
+$ cd ..
+$ rm redis-stable.tar.gz
 ```
 
 ### Installing
 
 
 ```
+$ pip install python-telegram-bot --upgrade
 $ ./setup.py
 $ sudo systemctl enable redis.service
 $ sudo systemctl enable dxbot.service
@@ -53,7 +68,7 @@ Add additional notes about how to deploy this on a live system
 ## Built With
 
 * [Redis](https://github.com/antirez/redis) - Database
-* [Maven](https://github.com/python-telegram-bot/python-telegram-bot) - Python telegram bot wrapper
+* [Python-Telegram-Bot](https://github.com/python-telegram-bot/python-telegram-bot) - Python telegram bot wrapper
 
 ## Authors
 

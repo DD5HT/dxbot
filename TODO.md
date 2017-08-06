@@ -8,9 +8,10 @@ Features
 
 Stuff for later
 ---------------
-- rewite cluster module in RUST
+- rewite cluster.py in RUST
 - faster search algo. 
 - read only part of memory??
+- optimize masterlist generation
 
 Deployment
 ==========
