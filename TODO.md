@@ -10,6 +10,7 @@ Stuff to fix
 ============
 - handle internet connection drop
 - handle stopped dx cluster
+- add proper debug messaging
 
 Stuff for later
 ---------------
@@ -22,3 +23,5 @@ Deployment
 ==========
 - deploy on raspberry pi
 - refactor code
+- create redis.service
+- create dxbot.service
