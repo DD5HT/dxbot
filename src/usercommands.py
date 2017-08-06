@@ -60,6 +60,7 @@ def add_dxcc(user_id, dxcc):
 
 def delete_dxcc(user_id):
     pass
+
 def get_dxcc(user_id):
     user_id = "DXCC:" + str(user_id) 
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -69,8 +70,6 @@ def get_dxcc(user_id):
         return data
     else:
         return failstring
-
-
 
 def get_all_chats_ids():
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
