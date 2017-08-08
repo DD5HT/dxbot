@@ -33,15 +33,12 @@ $ rm redis-stable.tar.gz
 
 ### Installing
 
-
 ```
 $ pip install python-telegram-bot --upgrade
 $ ./setup.py
 $ sudo systemctl enable redis.service
 $ sudo systemctl enable dxbot.service
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
