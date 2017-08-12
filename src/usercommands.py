@@ -41,6 +41,9 @@ def get_calls(user_id):
     data = r.get(user_id).decode('utf-8')
     failstring = "You have entered no calls so far!"
     if data:
+        data = data.split()  #TODO sort after 
+        data.sort()
+        data = "  ".join(data)
         return data
     else:
         return failstring
