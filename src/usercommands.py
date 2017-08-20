@@ -6,8 +6,8 @@ def create_user(user_id):
 
     user_id_calls = "CALLS:" + str(user_id)
     user_id_dxcc = "DXCC:" + str(user_id)
-    r.set(user_id_calls, "")
-    r.set(user_id_dxcc, "")
+    #r.set(user_id_calls, "")
+    #r.set(user_id_dxcc, "")
 
     success = "Your account was created successfully, good DX!"
     return success
@@ -45,16 +45,16 @@ def delete_call(user_id, call): #TODO remove more than one call with one command
 def get_calls(user_id):
     user_id = "CALLS:" + str(user_id) 
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    data = r.get(user_id).decode('utf-8') #TODO check null case
-    failstring = "You have entered no calls so far!"
-    if data:
-        data = data.split()  #TODO sort after 
+    try:
+        data = r.get(user_id).decode('utf-8') 
+        data = data.split()
         data.sort()
         data = "  ".join(data)
         return data
-    else:
-        return failstring
 
+    except AttributeError:
+        return "You have entered no calls so far!"
+ 
 def add_dxcc(user_id, dxcc):
     """Adds new dxcc to the database"""
     user_id = "DXCC:" + str(user_id)

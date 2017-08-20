@@ -10,6 +10,7 @@ def clustersearch():
     thread.start()
     print("JO")
 
+
 def user_cluster(user_id): 
     """Checks if callsigns in user list match callsigns in master list"""
     r = redis.StrictRedis(host='localhost', port=6379, db=0)   
@@ -20,6 +21,7 @@ def user_cluster(user_id):
         user = ""
     r.set(user_id,"")
     return user
+
 
 def dxcluster():#TODO retry if internet drops
     """Starts the DX-Cluster"""
@@ -38,21 +40,25 @@ def dxcluster():#TODO retry if internet drops
         for i in range(0,AMOUNT):
             output = tn.read_until(b'\n').decode('utf-8')
             get_call(output)
+            get_dxcc(output)
 
-def get_call(clusteroutput):
-    formated_output = []
-    for i in clusteroutput.split():
-        formated_output.append(i)
-    
+
+def get_call(clusteroutput): 
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    call = formated_output[4]
-    print(call)
+    
+    call = clusteroutput.split()[4]
     test = r.get(call)
     if test != None:
         for i in test.decode("utf-8").split(" "):
             key = "BUCKET:"+ i
             r.append(key, clusteroutput)
             print(key)
+
+
+def get_dxcc(clusteroutput):
+    formated_output = clusteroutput.split()[4]
+    print(formated_output)
+
 
 def reset_callsignlist():
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
