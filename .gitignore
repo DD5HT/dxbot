@@ -3,3 +3,6 @@
 __pycache__/
 resources/
 
+src/test/dxclustersample.txt
+src/test/dxclustersampleNEW.txt
+src/old_usercommands.py

@@ -10,57 +10,16 @@ def clustersearch():
     thread.start()
     print("JO")
 
-def generate_master_list():
-    """Generates a list with all callsigns from all users which is used to match with the dxcluster output"""
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    s = set()
-    for name in r.keys("CALLS:*"): #Matches all CALL KE
-        #print(name.decode("utf-8").replace("CALLS:", ""))
-        data = r.get(name).decode('utf-8')
-        for item in data.split():
-            s.add(item)
-    print(s)
-    return list(s)
-
-def get_matches():
-    """Returns all DX spots generated out of the master list"""
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    data = []
-    try:
-        stringdata = r.get("CALLSIGNS").decode('utf-8') ##
-        data = stringdata.split(u";;;;;")
-        #data = data + "\n"
-    except AttributeError:
-        print("Missing CALLSIGNS KEY")
-        print("Finally will create a new KEY")
-    finally:
-        return data # pylint: disable=W0150
-
-
 def user_cluster(user_id): 
     """Checks if callsigns in user list match callsigns in master list"""
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
- 
-    masteroutput = get_matches()
-    
-    user_id = "CALLS:" + str(user_id)
-    user = r.get(user_id).decode('utf-8')
-    user = user.split()
-
-    bucket = []
-    for entries in masteroutput:
-        for call in user: #ALL Calls
-            if call in entries: 
-                print("We got a Match")
-                print(entries)
-                bucket.append(entries)
-                print(bucket)
-    
-    answer = ""
-    for i in bucket:
-        answer = answer + str(i)
-        print("IT WORKS NOW" + answer)
-    return answer
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)   
+    user_id = "BUCKET:" + str(user_id)
+    try: 
+        user = r.get(user_id).decode('utf-8')
+    except  AttributeError: #TODO report error to higher function instead of ""
+        user = ""
+    r.set(user_id,"")
+    return user
 
 def dxcluster():#TODO retry if internet drops
     """Starts the DX-Cluster"""
@@ -78,22 +37,26 @@ def dxcluster():#TODO retry if internet drops
         #now dx messages are comming
         for i in range(0,AMOUNT):
             output = tn.read_until(b'\n').decode('utf-8')
-            #output = output.replace("\r\n", "")  ##WHY ?!
-            for call in generate_master_list():
-            
-                if call in output:
-                    print(str(i) + " FOUND")
-                    #print(output)
-                    matchedcall(output)
-            #print(output)
-    
+            get_call(output)
 
-def matchedcall(clusteroutput):
+def get_call(clusteroutput):
+    formated_output = []
+    for i in clusteroutput.split():
+        formated_output.append(i)
+    
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    clusteroutput = clusteroutput +";;;;;"
-    print(clusteroutput)
-    r.append("CALLSIGNS",clusteroutput)
+    call = formated_output[4]
+    print(call)
+    test = r.get(call)
+    if test != None:
+        for i in test.decode("utf-8").split(" "):
+            key = "BUCKET:"+ i
+            r.append(key, clusteroutput)
+            print(key)
 
 def reset_callsignlist():
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
     r.set("CALLSIGNS", "") 
+
+
+

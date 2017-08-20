@@ -1,60 +1,41 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# Basic example for a bot that uses inline keyboards.
-# This program is dedicated to the public domain under the CC0 license.
+import redis
+from telnetlib import Telnet
+from time import sleep
+from sys import argv
 
-import logging
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-
-
-def start(bot, update):
-    keyboard = [[InlineKeyboardButton("Add a new Call", callback_data='1'),
-                 InlineKeyboardButton("List all Calls", callback_data='2')],
-
-                [InlineKeyboardButton("Option 3", callback_data='3')]]
-
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
-    update.message.reply_text('Please choose:', reply_markup=reply_markup)
-
-
-def button(bot, update):
-    query = update.callback_query
+def dxcluster():#TODO retry if internet drops
+    """Starts the DX-Cluster"""
+    CALLSIGN = b"DD5HT"
+    AMOUNT = 100000
     
-    if query.data == "1":
-        print("JOP")
-    else:
-        print(query.data)
+    print("DX-Cluster started!")
+    with Telnet('cluster.dl9gtb.de', 8000) as tn:
+        #login into dx cluster
+        sleep(0.5)
+        print(tn.read_very_eager().decode('utf-8'))
+        tn.write(CALLSIGN + b'\r\n')
+        sleep(0.5)
+        print(tn.read_until(b'arc6>\r\n').decode('utf-8'))
+        #now dx messages are comming
+        for i in range(0,AMOUNT):
+            output = tn.read_until(b'\n').decode('utf-8')
+            get_call(output)
 
-    bot.edit_message_text(text="Selected option: %s" % query.data,
-                          chat_id=query.message.chat_id,
-                          message_id=query.message.message_id)
-
+def get_call(clusteroutput):
+    formated_output = []
+    for i in clusteroutput.split():
+        formated_output.append(i)
     
-def help(bot, update):
-    update.message.reply_text("Use /start to test this bot.")
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    call = formated_output[4]
+    print(call)
+    test = r.get(call)
+    if test != None:
+        for i in test.decode("utf-8").split(" "):
+            key = "BUCKET:"+ i
+            r.append(key, clusteroutput+";*;*;*;*;")
+            print(key)
 
-
-def error(bot, update, error):
-    logging.warning('Update "%s" caused error "%s"' % (update, error))
-
-
-# Create the Updater and pass it your bot's token.
-updater = Updater("396197090:AAFQ5FcWLIVqBfr3A0Ww4qSFvN-57Xi0J-k")
-
-updater.dispatcher.add_handler(CommandHandler('start', start))
-updater.dispatcher.add_handler(CallbackQueryHandler(button))
-updater.dispatcher.add_handler(CommandHandler('help', help))
-updater.dispatcher.add_error_handler(error)
-
-# Start the Bot
-updater.start_polling()
-
-# Run the bot until the user presses Ctrl-C or the process receives SIGINT,
-# SIGTERM or SIGABRT
-updater.idle()
+dxcluster()
