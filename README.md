@@ -1,6 +1,6 @@
 # Telegram DX-Bot
 
-A Telegram DX-Cluster bot.
+A Telegram DX-Cluster bot using redis and telnet.
 
 ## Getting Started
 
