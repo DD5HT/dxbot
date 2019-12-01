@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, JobQueue
-from telegram import Bot
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.error import(BadRequest)
 import logging
-import cluster
-import usercommands
 from token import TOKEN
 
+import cluster
+import usercommands
+from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.error import BadRequest
+from telegram.ext import CallbackQueryHandler, CommandHandler, JobQueue, Updater
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 
 logger = logging.getLogger(__name__)
 
@@ -23,18 +23,20 @@ logger = logging.getLogger(__name__)
 def start(bot, update):  # TODO create a TEXTfile with all info texts
     """Starts and resets the bot"""
 
-    update.message.reply_text("""Hi I'm your new DX Bot.\n
-Use /add to add new callsigns\nUse /list to list all callsigns\nUse /rm to delete calls\nUse /adddx to add a new dxcc
-Use /listdx to list a dxcc\nWARNING: DXCC feature is not working""")
-
     update.message.reply_text(
-        usercommands.create_user(update.effective_user.id))
+        """Hi I'm your new DX Bot.\n
+Use /add to add new callsigns\nUse /list to list all callsigns\nUse /rm to delete calls\nUse /adddx to add a new dxcc
+Use /listdx to list a dxcc\nWARNING: DXCC feature is not working"""
+    )
+
+    update.message.reply_text(usercommands.create_user(update.effective_user.id))
 
 
 def help(bot, update):
     """Prints out help message"""
     update.message.reply_text(
-        "Use:\n/start to reset\n/add to add CALLS\n/list to show all CALLS\n/rm to delete CALLS")
+        "Use:\n/start to reset\n/add to add CALLS\n/list to show all CALLS\n/rm to delete CALLS"
+    )
 
 
 def error(bot, update, error):
@@ -43,20 +45,25 @@ def error(bot, update, error):
 
 
 def menu(bot, update):
-    keyboard = [[InlineKeyboardButton("Add a new Call", callback_data='newcall'),
-                 InlineKeyboardButton(
-                     "List all Calls", callback_data='listcalls'),
-                 InlineKeyboardButton("Delete a Call", callback_data='deletecall')],
-
-                [InlineKeyboardButton("Add a new DXCC", callback_data='newdxcc'),
-                 InlineKeyboardButton(
-                     "List all DXCC", callback_data='listdxcc'),
-                 InlineKeyboardButton("Delete a DXCC", callback_data='deletedxcc'), ]]
+    keyboard = [
+        [
+            InlineKeyboardButton("Add a new Call", callback_data="newcall"),
+            InlineKeyboardButton("List all Calls", callback_data="listcalls"),
+            InlineKeyboardButton("Delete a Call", callback_data="deletecall"),
+        ],
+        [
+            InlineKeyboardButton("Add a new DXCC", callback_data="newdxcc"),
+            InlineKeyboardButton("List all DXCC", callback_data="listdxcc"),
+            InlineKeyboardButton("Delete a DXCC", callback_data="deletedxcc"),
+        ],
+    ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     update.message.reply_text(
-        'Please choose: (You can press the Button but you cant type in commands after that :-( )', reply_markup=reply_markup)
+        "Please choose: (You can press the Button but you cant type in commands after that :-( )",
+        reply_markup=reply_markup,
+    )
 
 
 def button(bot, update):  # TODO fix actions
@@ -64,29 +71,42 @@ def button(bot, update):  # TODO fix actions
     query = update.callback_query
     choices = {
         "newcall": ("Please enter a valid callsign:", "TEST"),
-        "listcalls": ("Here are all callsigns:",  "TEST"),
-        "deletecall": ("Please enter the callsign you want to delete from your list:",  "TEST"),
-        "newdxcc": ("Please enter a valid country/dxcc:",  "TEST"),
-        "listdxcc": ("Here is a complete list of dxcc we are watching for you:",  "TEST"),
-        "deletedxcc": ("Please enter a dxcc you want to delete from your list:",  "TEST")
+        "listcalls": ("Here are all callsigns:", "TEST"),
+        "deletecall": (
+            "Please enter the callsign you want to delete from your list:",
+            "TEST",
+        ),
+        "newdxcc": ("Please enter a valid country/dxcc:", "TEST"),
+        "listdxcc": (
+            "Here is a complete list of dxcc we are watching for you:",
+            "TEST",
+        ),
+        "deletedxcc": (
+            "Please enter a dxcc you want to delete from your list:",
+            "TEST",
+        ),
     }
     dxoption = choices.get(query.data, "ERROR")[0]
-    bot.edit_message_text(text=dxoption,
-                          chat_id=query.message.chat_id,
-                          message_id=query.message.message_id)
+    bot.edit_message_text(
+        text=dxoption,
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id,
+    )
 
 
 def addcall(bot, update):
     """Adds new call to callsign list"""
     newcall = usercommands.add_call(
-        update.effective_user.id, update.message.text.split(' ', 1)[1])
+        update.effective_user.id, update.message.text.split(" ", 1)[1]
+    )
     update.message.reply_text(newcall)
 
 
 def deletecall(bot, update):
     """Deletes an old call"""
     deletedcall = usercommands.delete_call(
-        update.effective_user.id, update.message.text.split(' ', 1)[1])
+        update.effective_user.id, update.message.text.split(" ", 1)[1]
+    )
     update.message.reply_text(deletedcall)
 
 
@@ -98,7 +118,8 @@ def listcalls(bot, update):
 def adddxcc(bot, update):
     """Adds new dxcc to dxcc list"""
     new_dxcc = usercommands.add_dxcc(
-        update.effective_user.id, update.message.text.split(' ', 1)[1])
+        update.effective_user.id, update.message.text.split(" ", 1)[1]
+    )
     update.message.reply_text(new_dxcc)
 
 
@@ -162,5 +183,5 @@ def main():
     cluster.clustersearch()
 
 
-if __name__ == '__main__':
-main()
+if __name__ == "__main__":
+    main()
